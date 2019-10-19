@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 import json
 from datetime import datetime
-import requests
+
 import pandas
+import requests
 
 
 class ZhihuSpider():
@@ -31,7 +33,7 @@ class ZhihuSpider():
         querystring = {"t": "general",
                        "q": search_key,
                        "correction": "1",
-                       "offset": "20",
+                       "offset": "0",
                        "limit": "20",
                        }
         response = requests.request("GET", url, headers=self.headers, params=querystring)

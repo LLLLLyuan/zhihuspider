@@ -1,8 +1,0 @@
-scrapy
-beautifulsoup4
-pymongo
-html5lib
-scrapy_redis_sentinel
-requests
-redis-py-cluster==1.3.6
-redis==2.10.6
