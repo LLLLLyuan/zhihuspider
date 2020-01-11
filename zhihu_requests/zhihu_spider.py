@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+import re
 from datetime import datetime
 
 import pandas
@@ -37,6 +38,7 @@ class ZhihuSpider():
                        "limit": "20",
                        }
         response = requests.request("GET", url, headers=self.headers, params=querystring)
+        print(response.url)
         response.encoding = response.apparent_encoding
         return response
 
@@ -59,12 +61,12 @@ class ZhihuSpider():
                     description = one["object"]['excerpt'].replace("<em>", "").replace("</em>", "").strip() + "..."
                     href = f"http://www.zhihu.com/question/{question_id}/answer/{answer_id}"
                     create_date = one["object"]['created_time']
+                    content = re.sub('(<.*?>)', '', re.sub('(<br/>)', '\n', one["object"]['content']))
                     one_info['url'] = href
                     one_info['create_date'] = datetime.fromtimestamp(create_date)
                     one_info['title'] = title
                     one_info['description'] = description
-                    result_list.append(one_info)
-                    print(one_info)
+                    one_info['content'] = content.strip()
             except Exception as e:
                 # print(str(e))
                 pass
@@ -72,7 +74,7 @@ class ZhihuSpider():
 
     def sava_to_excel(self, file_path):
         df = pandas.DataFrame(self.result_list)
-        df.to_csv(file_path, index=False, encoding='utf-8')
+        df.to_csv(file_path, index=False, encoding='utf-8-sig')
         print("save ok")
 
 if __name__ == '__main__':
